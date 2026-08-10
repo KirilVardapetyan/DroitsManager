@@ -19,27 +19,27 @@ QtObject {
     readonly property color info: "#3b82f6"
 
     // Background Colors
-    readonly property color backgroundPrimary: "#1b1716"
-    readonly property color backgroundSecondary: "#2b170f"
-    readonly property color backgroundCard: "#2e1f1a"
-    readonly property color backgroundElevated: "#342016"
-    readonly property color backgroundModal: "#24140d"
-    readonly property color backgroundRaised: "#22120c"
-    readonly property color backgroundOverlay: Qt.rgba(38/255, 24/255, 17/255, 0.8)
-    readonly property color backgroundSubtle: Qt.rgba(200/255, 147/255, 116/255, 0.1)
+    readonly property color backgroundPrimary: "#18181b"
+    readonly property color backgroundSecondary: "#27272a"
+    readonly property color backgroundCard: "#1e1e21"
+    readonly property color backgroundElevated: "#26262b"
+    readonly property color backgroundModal: "#1c1c20"
+    readonly property color backgroundRaised: "#202024"
+    readonly property color backgroundOverlay: Qt.rgba(24/255, 24/255, 27/255, 0.8)
+    readonly property color backgroundSubtle: Qt.rgba(160/255, 160/255, 170/255, 0.1)
 
     // Text Colors
     readonly property color textPrimary: "#ffffff"
-    readonly property color textSecondary: "#8e7462"
-    readonly property color textTertiary: "#c1af8f"
-    readonly property color textMuted: "#b9a190"
+    readonly property color textSecondary: "#71717a"
+    readonly property color textTertiary: "#a1a1aa"
+    readonly property color textMuted: "#9a9aa3"
 
     // Border Colors
-    readonly property color borderPrimary: "#584131"
+    readonly property color borderPrimary: "#3f3f46"
     readonly property color borderFocus: "#fb923c"
-    readonly property color borderSubtle: Qt.rgba(70/255, 51/255, 39/255, 0.43)
-    readonly property color borderRow: Qt.rgba(70/255, 51/255, 39/255, 0.4)
-    readonly property color borderStrong: Qt.rgba(70/255, 51/255, 39/255, 0.6)
+    readonly property color borderSubtle: Qt.rgba(63/255, 63/255, 70/255, 0.43)
+    readonly property color borderRow: Qt.rgba(63/255, 63/255, 70/255, 0.4)
+    readonly property color borderStrong: Qt.rgba(63/255, 63/255, 70/255, 0.6)
 
     // Overlay & Hover
     readonly property color overlay: Qt.rgba(0, 0, 0, 0.5)
