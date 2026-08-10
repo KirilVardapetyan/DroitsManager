@@ -48,8 +48,13 @@ Rectangle {
             acceptedDevices: Qt.platform.pluginName === "cocoa" || Qt.platform.pluginName === "wayland"
                              ? PointerDevice.Mouse | PointerDevice.TouchPad
                              : PointerDevice.Mouse
-            rotationScale: 1/120
-            property: "zoomLevel"
+            // Zoom anchored at the cursor: the coordinate under the pointer
+            // stays fixed instead of drifting toward the map center.
+            onWheel: function(event) {
+                var coordinate = map.toCoordinate(wheel.point.position, false)
+                map.zoomLevel += event.angleDelta.y / 120
+                map.alignCoordinateToPoint(coordinate, wheel.point.position)
+            }
         }
 
         DragHandler {
