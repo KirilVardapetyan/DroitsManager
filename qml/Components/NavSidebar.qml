@@ -6,11 +6,8 @@ Rectangle {
 
     property int currentIndex: 0
 
-    signal dashboardClicked()
+    signal liveMapClicked()
     signal droidsClicked()
-    signal missionsClicked()
-    signal monitoringClicked()
-    signal settingsClicked()
 
     width: Theme.navWidth
     color: Theme.backgroundOverlay
@@ -52,33 +49,15 @@ Rectangle {
                 spacing: Theme.spacingLg
 
                 NavButton {
-                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_dashboard.svg"
+                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_map.svg"
                     selected: root.currentIndex === 0
-                    onClicked: root.dashboardClicked()
+                    onClicked: root.liveMapClicked()
                 }
 
                 NavButton {
-                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_map.svg"
+                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/icon_drobot.svg"
                     selected: root.currentIndex === 1
                     onClicked: root.droidsClicked()
-                }
-
-                NavButton {
-                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_mission.svg"
-                    selected: root.currentIndex === 2
-                    onClicked: root.missionsClicked()
-                }
-
-                NavButton {
-                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_monitoring.svg"
-                    selected: root.currentIndex === 3
-                    onClicked: root.monitoringClicked()
-                }
-
-                NavButton {
-                    iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_settings.svg"
-                    selected: root.currentIndex === 4
-                    onClicked: root.settingsClicked()
                 }
             }
 

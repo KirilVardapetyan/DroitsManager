@@ -26,16 +26,12 @@ qt_add_qml_module(appDroidsManager
         qml/Components/NavSidebar.qml
         qml/Components/NavButton.qml
         qml/Components/PageHeader.qml
-        qml/Screens/MainScreen.qml
+        qml/Screens/LiveMapScreen.qml
+        qml/Screens/DroidsScreen.qml
     RESOURCES
         assets/images/logo_new.png
-        assets/icons/nav_dashboard.svg
         assets/icons/nav_map.svg
-        assets/icons/nav_mission.svg
-        assets/icons/nav_monitoring.svg
-        assets/icons/nav_settings.svg
         assets/icons/icon_drobot.svg
-        assets/icons/icon_power.svg
         assets/icons/icon_user.svg
 )
 

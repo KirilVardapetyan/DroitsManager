@@ -14,14 +14,6 @@ Window {
 
     property int currentNavIndex: 0
 
-    readonly property var sectionNames: [
-        qsTr("Dashboard"),
-        qsTr("Droids"),
-        qsTr("Missions"),
-        qsTr("Monitoring"),
-        qsTr("Settings")
-    ]
-
     Shortcut {
         sequence: "Ctrl+Q"
         onActivated: Qt.quit()
@@ -35,11 +27,14 @@ Window {
         currentIndex: window.currentNavIndex
         z: 2
 
-        onDashboardClicked: window.currentNavIndex = 0
-        onDroidsClicked: window.currentNavIndex = 1
-        onMissionsClicked: window.currentNavIndex = 2
-        onMonitoringClicked: window.currentNavIndex = 3
-        onSettingsClicked: window.currentNavIndex = 4
+        onLiveMapClicked: {
+            window.currentNavIndex = 0
+            stackView.replace(null, liveMapScreen, {}, StackView.Immediate)
+        }
+        onDroidsClicked: {
+            window.currentNavIndex = 1
+            stackView.replace(null, droidsScreen, {}, StackView.Immediate)
+        }
     }
 
     StackView {
@@ -48,7 +43,7 @@ Window {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        initialItem: mainScreen
+        initialItem: liveMapScreen
         pushEnter: Transition {}
         pushExit: Transition {}
         popEnter: Transition {}
@@ -58,9 +53,12 @@ Window {
     }
 
     Component {
-        id: mainScreen
-        MainScreen {
-            sectionName: window.sectionNames[window.currentNavIndex]
-        }
+        id: liveMapScreen
+        LiveMapScreen {}
+    }
+
+    Component {
+        id: droidsScreen
+        DroidsScreen {}
     }
 }

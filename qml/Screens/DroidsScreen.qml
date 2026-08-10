@@ -3,10 +3,6 @@ import DroidsManager
 import "../Components"
 
 Rectangle {
-    id: root
-
-    property string sectionName: qsTr("Dashboard")
-
     color: Theme.backgroundPrimary
 
     Column {
@@ -15,8 +11,8 @@ Rectangle {
         spacing: Theme.spacingXl
 
         PageHeader {
-            title: root.sectionName
-            subtitle: qsTr("Droids Manager")
+            title: qsTr("Droids")
+            subtitle: qsTr("Connected droids and their state")
         }
 
         Rectangle {
@@ -29,7 +25,7 @@ Rectangle {
 
             Text {
                 anchors.centerIn: parent
-                text: qsTr("Nothing here yet")
+                text: qsTr("No droids connected yet")
                 color: Theme.textSecondary
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSizeLarge
