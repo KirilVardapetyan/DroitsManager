@@ -27,12 +27,19 @@ qt_add_qml_module(appDroidsManager
         qml/Components/NavButton.qml
         qml/Components/PageHeader.qml
         qml/Components/OsmMapPlugin.qml
+        qml/Components/ModalShell.qml
+        qml/Components/DeliveryBoxMarker.qml
+        qml/Components/DeliveryBoxModal.qml
+        qml/Controls/CloseButton.qml
+        qml/Controls/PrimaryActionButton.qml
+        qml/Controls/SecondaryActionButton.qml
         qml/Screens/LiveMapScreen.qml
         qml/Screens/DroidsScreen.qml
     RESOURCES
         assets/icons/nav_map.svg
         assets/icons/icon_droid.svg
         assets/icons/icon_user.svg
+        assets/icons/icon_box.svg
 )
 
 set_target_properties(appDroidsManager PROPERTIES

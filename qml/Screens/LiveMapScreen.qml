@@ -60,5 +60,19 @@ Rectangle {
 
         onZoomLevelChanged: root.savedZoom = map.zoomLevel
         onCenterChanged: root.savedCenter = map.center
+
+        DeliveryBoxMarker {
+            id: deliveryBoxMarker
+            coordinate: root.defaultCenter
+            boxName: qsTr("Box 1")
+            onClicked: deliveryBoxModal.open()
+        }
+    }
+
+    DeliveryBoxModal {
+        id: deliveryBoxModal
+        boxName: deliveryBoxMarker.boxName
+        onOpenRequested: console.log("[LiveMap] Open requested for", boxName)
+        onCloseRequested: console.log("[LiveMap] Close requested for", boxName)
     }
 }

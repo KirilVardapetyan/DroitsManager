@@ -21,6 +21,7 @@ QtObject {
     readonly property color backgroundSecondary: "#0f172b"
     readonly property color backgroundCard: "#1a1f2e"
     readonly property color backgroundElevated: "#162034"
+    readonly property color backgroundModal: "#0d1424"
     readonly property color backgroundOverlay: Qt.rgba(17/255, 24/255, 38/255, 0.8)
     readonly property color backgroundSubtle: Qt.rgba(116/255, 147/255, 200/255, 0.1)
 
@@ -32,9 +33,11 @@ QtObject {
 
     // Border Colors
     readonly property color borderPrimary: "#314158"
+    readonly property color borderFocus: "#51a2ff"
     readonly property color borderSubtle: Qt.rgba(39/255, 51/255, 70/255, 0.43)
 
     // Overlay & Hover
+    readonly property color overlay: Qt.rgba(0, 0, 0, 0.5)
     readonly property color hoverLight: Qt.rgba(1, 1, 1, 0.1)
     readonly property color hoverSubtle: Qt.rgba(1, 1, 1, 0.05)
 
@@ -65,6 +68,7 @@ QtObject {
     readonly property int zOverlay: 500
 
     // Component Sizes
+    readonly property int buttonHeight: 40
     readonly property int navIconSize: 48
     readonly property int navWidth: 80
     readonly property int headerHeight: 60
