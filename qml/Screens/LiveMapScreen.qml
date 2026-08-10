@@ -7,8 +7,8 @@ import "../Components"
 Rectangle {
     id: root
 
-    readonly property var defaultCenter: QtPositioning.coordinate(32.33291, 34.85992)
-    readonly property real defaultZoom: 12
+    readonly property var defaultCenter: QtPositioning.coordinate(40.17038, 44.51981)
+    readonly property real defaultZoom: 15
     property real savedZoom: defaultZoom
     property var savedCenter: defaultCenter
 
