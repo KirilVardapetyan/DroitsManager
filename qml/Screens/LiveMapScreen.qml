@@ -65,14 +65,14 @@ Rectangle {
             id: deliveryBoxMarker
             coordinate: root.defaultCenter
             boxName: qsTr("Box 1")
-            onClicked: deliveryBoxModal.open()
+            onClicked: deliveryBoxDrawer.show()
         }
     }
 
-    DeliveryBoxModal {
-        id: deliveryBoxModal
+    DeliveryBoxDrawer {
+        id: deliveryBoxDrawer
         boxName: deliveryBoxMarker.boxName
-        onOpenRequested: console.log("[LiveMap] Open requested for", boxName)
-        onCloseRequested: console.log("[LiveMap] Close requested for", boxName)
+        onOpenBoxRequested: console.log("[LiveMap] Open box requested for", boxName)
+        onCloseBoxRequested: console.log("[LiveMap] Close box requested for", boxName)
     }
 }

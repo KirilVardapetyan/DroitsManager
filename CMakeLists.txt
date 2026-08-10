@@ -29,7 +29,7 @@ qt_add_qml_module(appDroidsManager
         qml/Components/OsmMapPlugin.qml
         qml/Components/ModalShell.qml
         qml/Components/DeliveryBoxMarker.qml
-        qml/Components/DeliveryBoxModal.qml
+        qml/Components/DeliveryBoxDrawer.qml
         qml/Controls/CloseButton.qml
         qml/Controls/PrimaryActionButton.qml
         qml/Controls/SecondaryActionButton.qml
