@@ -1,5 +1,7 @@
 build/
 build-*/
+.qtcreator/
 CMakeLists.txt.user
+*.user
 *.autosave
 .DS_Store
