@@ -27,7 +27,7 @@ Rectangle {
         }
 
         NavButton {
-            iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/icon_droid.svg"
+            iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/icon_box.svg"
             selected: root.currentIndex === 1
             onClicked: root.droidsClicked()
         }

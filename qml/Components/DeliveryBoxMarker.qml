@@ -22,7 +22,7 @@ MapQuickItem {
             width: 48
             height: 48
             radius: 24
-            color: Qt.rgba(13/255, 20/255, 36/255, 0.9)
+            color: Qt.rgba(36/255, 20/255, 13/255, 0.9)
             border.width: 1
             border.color: Theme.borderSubtle
 
@@ -47,7 +47,7 @@ MapQuickItem {
             width: pinLabel.width + 10
             height: 16
             radius: 8
-            color: Qt.rgba(13/255, 20/255, 36/255, 0.85)
+            color: Qt.rgba(36/255, 20/255, 13/255, 0.85)
             border.width: 1
             border.color: Theme.borderSubtle
 

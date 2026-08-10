@@ -3,33 +3,53 @@ import DroidsManager
 import "../Components"
 
 Rectangle {
+    id: root
+
     color: Theme.backgroundPrimary
 
-    Column {
-        anchors.fill: parent
+    ListModel { id: boxesModel }
+
+    PageHeader {
+        id: header
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         anchors.margins: Theme.spacingXl
-        spacing: Theme.spacingXl
+        title: qsTr("Droids")
+        subtitle: qsTr("Delivery boxes and their connection state")
+    }
 
-        PageHeader {
-            title: qsTr("Droids")
-            subtitle: qsTr("Connected droids and their state")
+    DroidsTable {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
+        anchors.margins: Theme.spacingXl
+        title: qsTr("Delivery Boxes")
+        buttonText: qsTr("Connect Box")
+        model: boxesModel
+
+        onConnectClicked: connectModal.open()
+        onToggleClicked: function(index) {
+            var current = boxesModel.get(index).status
+            boxesModel.setProperty(index, "status",
+                current === DroidStatusBadge.Status.Connected
+                ? DroidStatusBadge.Status.Offline
+                : DroidStatusBadge.Status.Connected)
         }
+        onRemoveClicked: function(index) {
+            boxesModel.remove(index)
+        }
+    }
 
-        Rectangle {
-            width: parent.width
-            height: 200
-            radius: Theme.radiusMd
-            color: Theme.backgroundCard
-            border.width: 1
-            border.color: Theme.borderSubtle
-
-            Text {
-                anchors.centerIn: parent
-                text: qsTr("No droids connected yet")
-                color: Theme.textSecondary
-                font.family: Theme.fontFamily
-                font.pixelSize: Theme.fontSizeLarge
-            }
+    ConnectDroidModal {
+        id: connectModal
+        onConnectRequested: function(name, ipAddress) {
+            boxesModel.append({
+                name: name,
+                ipAddress: ipAddress,
+                status: DroidStatusBadge.Status.Connected
+            })
         }
     }
 }
