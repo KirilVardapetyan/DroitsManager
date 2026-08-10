@@ -29,9 +29,8 @@ qt_add_qml_module(appDroidsManager
         qml/Screens/LiveMapScreen.qml
         qml/Screens/DroidsScreen.qml
     RESOURCES
-        assets/images/logo_new.png
         assets/icons/nav_map.svg
-        assets/icons/icon_drobot.svg
+        assets/icons/icon_droid.svg
         assets/icons/icon_user.svg
 )
 

@@ -7,7 +7,6 @@ QtObject {
     readonly property color primaryHover: "#1d4ed8"
     readonly property color primaryPressed: "#1e40af"
     readonly property color accent: "#51a2ff"
-    readonly property color brandBlue: "#2952cc"
 
     // Status Colors
     readonly property color success: "#22c55e"
