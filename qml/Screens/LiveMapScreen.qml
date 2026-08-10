@@ -1,35 +1,64 @@
 import QtQuick
+import QtLocation
+import QtPositioning
 import DroidsManager
 import "../Components"
 
 Rectangle {
+    id: root
+
+    readonly property var defaultCenter: QtPositioning.coordinate(32.33291, 34.85992)
+    readonly property real defaultZoom: 12
+    property real savedZoom: defaultZoom
+    property var savedCenter: defaultCenter
+
     color: Theme.backgroundPrimary
 
-    Column {
+    OsmMapPlugin { id: mapPlugin }
+
+    Map {
+        id: map
         anchors.fill: parent
-        anchors.margins: Theme.spacingXl
-        spacing: Theme.spacingXl
+        plugin: mapPlugin
+        center: root.savedCenter
+        zoomLevel: root.savedZoom
+        copyrightsVisible: false
 
-        PageHeader {
-            title: qsTr("Live Map")
-            subtitle: qsTr("Real-time droid positions")
-        }
+        property geoCoordinate startCentroid
 
-        Rectangle {
-            width: parent.width
-            height: 400
-            radius: Theme.radiusMd
-            color: Theme.backgroundCard
-            border.width: 1
-            border.color: Theme.borderSubtle
-
-            Text {
-                anchors.centerIn: parent
-                text: qsTr("Map coming soon")
-                color: Theme.textSecondary
-                font.family: Theme.fontFamily
-                font.pixelSize: Theme.fontSizeLarge
+        PinchHandler {
+            id: pinch
+            target: null
+            onActiveChanged: if (active) {
+                map.startCentroid = map.toCoordinate(pinch.centroid.position, false)
             }
+            onScaleChanged: (delta) => {
+                map.zoomLevel += Math.log2(delta)
+                map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
+            }
+            onRotationChanged: (delta) => {
+                map.bearing -= delta
+                map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
+            }
+            grabPermissions: PointerHandler.TakeOverForbidden
         }
+
+        WheelHandler {
+            id: wheel
+            acceptedDevices: Qt.platform.pluginName === "cocoa" || Qt.platform.pluginName === "wayland"
+                             ? PointerDevice.Mouse | PointerDevice.TouchPad
+                             : PointerDevice.Mouse
+            rotationScale: 1/120
+            property: "zoomLevel"
+        }
+
+        DragHandler {
+            id: drag
+            target: null
+            onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+        }
+
+        onZoomLevelChanged: root.savedZoom = map.zoomLevel
+        onCenterChanged: root.savedCenter = map.center
     }
 }

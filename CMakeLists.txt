@@ -4,7 +4,7 @@ project(DroidsManager VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Svg)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Svg Location Positioning)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -26,6 +26,7 @@ qt_add_qml_module(appDroidsManager
         qml/Components/NavSidebar.qml
         qml/Components/NavButton.qml
         qml/Components/PageHeader.qml
+        qml/Components/OsmMapPlugin.qml
         qml/Screens/LiveMapScreen.qml
         qml/Screens/DroidsScreen.qml
     RESOURCES
@@ -46,6 +47,8 @@ target_link_libraries(appDroidsManager
         Qt6::Quick
         Qt6::QuickControls2
         Qt6::Svg
+        Qt6::Location
+        Qt6::Positioning
 )
 
 include(GNUInstallDirs)
