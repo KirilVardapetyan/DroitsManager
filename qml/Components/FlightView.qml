@@ -239,6 +239,38 @@ Item {
                 droneName: root.droneName
                 satelliteCount: telemetry.satellites
             }
+
+            // Swap control lives on whichever surface is small: here it is
+            // shown only while the map is the picture-in-picture panel.
+            Rectangle {
+                visible: root.videoFullscreen
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: Theme.spacingSm
+                width: 28
+                height: 28
+                radius: Theme.radiusXs
+                color: mapSwapArea.containsMouse ? Theme.hoverLight : Qt.rgba(24 / 255, 24 / 255, 27 / 255, 0.7)
+                border.width: 1
+                border.color: Theme.borderStrong
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "⇄"
+                    color: Theme.textPrimary
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                    font.weight: Font.DemiBold
+                }
+
+                MouseArea {
+                    id: mapSwapArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.videoFullscreen = !root.videoFullscreen
+                }
+            }
         }
 
         Rectangle {
@@ -348,7 +380,7 @@ Item {
             radius: root.videoFullscreen ? 0 : Theme.radiusMd
             streamUri: DroneStore.videoUriFor(root.droneIp)
             active: root.visible
-            showSwapButton: true
+            showSwapButton: !root.videoFullscreen
 
             onSwapRequested: root.videoFullscreen = !root.videoFullscreen
 
