@@ -23,7 +23,7 @@ Item {
     readonly property var commandCycle: ["takeoff", "waypoint", "land", "rtl"]
 
     signal cancelled()
-    signal shippingStarted()
+    signal shippingStarted(var drone)
 
     Component.onCompleted: DroneStore.pollingActive = true
     Component.onDestruction: DroneStore.pollingActive = false
@@ -766,7 +766,7 @@ Item {
                 backgroundColor: Theme.success
                 hoverBackgroundColor: Qt.darker(Theme.success, 1.15)
                 pressedBackgroundColor: Qt.darker(Theme.success, 1.3)
-                onClicked: root.shippingStarted()
+                onClicked: root.shippingStarted(root.selectedDrone)
 
                 Text {
                     text: qsTr("Start Shipping")
