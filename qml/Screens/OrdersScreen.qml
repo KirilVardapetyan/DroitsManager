@@ -124,7 +124,6 @@ Rectangle {
     Loader {
         active: root.inFlight
         anchors.fill: parent
-        anchors.margins: Theme.spacingXl
 
         sourceComponent: FlightView {
             droneName: root.flightDrone ? root.flightDrone.name : ""

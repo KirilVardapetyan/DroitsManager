@@ -102,9 +102,6 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: "transparent"
-        radius: Theme.radiusSm
-        border.width: 1
-        border.color: Theme.borderStrong
         clip: true
 
         OsmMapPlugin { id: flightMapPlugin }
