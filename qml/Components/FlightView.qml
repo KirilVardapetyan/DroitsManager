@@ -13,6 +13,7 @@ Item {
     property var order: null
     property bool followDrone: true
     property string shipError: ""
+    property bool videoFullscreen: false
 
     // The flown-path breadcrumb keeps at most this many meters and is cut
     // from its oldest end once longer.
@@ -100,15 +101,32 @@ Item {
     ListModel { id: missionDashesModel }
 
     Rectangle {
+        id: surface
         anchors.fill: parent
         color: "transparent"
         clip: true
+
+        // Geometry of the small picture-in-picture slot (bottom right).
+        readonly property real pipWidth: 300
+        readonly property real pipHeight: 200
+        readonly property real pipX: width - pipWidth - Theme.spacingLg
+        readonly property real pipY: height - pipHeight - Theme.spacingLg
 
         OsmMapPlugin { id: flightMapPlugin }
 
         Map {
             id: flightMap
-            anchors.fill: parent
+            x: root.videoFullscreen ? surface.pipX : 0
+            y: root.videoFullscreen ? surface.pipY : 0
+            width: root.videoFullscreen ? surface.pipWidth : surface.width
+            height: root.videoFullscreen ? surface.pipHeight : surface.height
+            z: root.videoFullscreen ? 5 : 0
+
+            Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on y { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on width { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on height { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+
             plugin: flightMapPlugin
             center: root.mission && root.mission.length > 0
                     ? QtPositioning.coordinate(root.mission[0].latitude, root.mission[0].longitude)
@@ -229,6 +247,7 @@ Item {
             anchors.right: parent.right
             anchors.top: parent.top
             height: 48
+            z: 10
             color: Qt.rgba(28 / 255, 28 / 255, 32 / 255, 0.92)
 
             Rectangle {
@@ -312,6 +331,7 @@ Item {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.margins: Theme.spacingLg
+            z: 10
             roll: telemetry.roll
             pitch: telemetry.pitch
             yaw: telemetry.yaw
@@ -320,18 +340,30 @@ Item {
 
         VideoStreamView {
             id: videoPanel
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.margins: Theme.spacingLg
+            x: root.videoFullscreen ? 0 : surface.pipX
+            y: root.videoFullscreen ? 0 : surface.pipY
+            width: root.videoFullscreen ? surface.width : surface.pipWidth
+            height: root.videoFullscreen ? surface.height : surface.pipHeight
+            z: root.videoFullscreen ? 1 : 5
+            radius: root.videoFullscreen ? 0 : Theme.radiusMd
             streamUri: DroneStore.videoUriFor(root.droneIp)
             active: root.visible
+            showSwapButton: true
+
+            onSwapRequested: root.videoFullscreen = !root.videoFullscreen
+
+            Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on y { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on width { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on height { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
         }
 
         SlideToShip {
             id: shipSlider
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: hud.verticalCenter
-            width: (videoPanel.x - (hud.x + hud.width)) / 2
+            width: (surface.pipX - (hud.x + hud.width)) / 2
+            z: 10
             busy: DroneStore.startingMission
 
             onActivated: {
@@ -345,6 +377,7 @@ Item {
             anchors.right: shipSlider.right
             anchors.bottom: shipSlider.top
             anchors.bottomMargin: Theme.spacingSm
+            z: 10
             visible: root.shipError !== ""
             text: root.shipError
             color: Theme.error

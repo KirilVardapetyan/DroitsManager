@@ -7,6 +7,9 @@ Rectangle {
 
     property string streamUri: ""
     property bool active: visible
+    property bool showSwapButton: false
+
+    signal swapRequested()
 
     width: 300
     height: 200
@@ -95,6 +98,36 @@ Rectangle {
             font.weight: Font.Bold
             style: Text.Outline
             styleColor: "#000000"
+        }
+    }
+
+    Rectangle {
+        visible: root.showSwapButton
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: Theme.spacingSm
+        width: 28
+        height: 28
+        radius: Theme.radiusXs
+        color: swapArea.containsMouse ? Theme.hoverLight : Qt.rgba(24 / 255, 24 / 255, 27 / 255, 0.7)
+        border.width: 1
+        border.color: Theme.borderStrong
+
+        Text {
+            anchors.centerIn: parent
+            text: "⇄"
+            color: Theme.textPrimary
+            font.family: Theme.fontFamily
+            font.pixelSize: 14
+            font.weight: Font.DemiBold
+        }
+
+        MouseArea {
+            id: swapArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: root.swapRequested()
         }
     }
 }
