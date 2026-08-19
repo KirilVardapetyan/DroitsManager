@@ -10,6 +10,7 @@ Item {
     property string droneName: ""
     property string droneIp: ""
     property var mission: []
+    property var order: null
     property bool followDrone: true
 
     // The flown-path breadcrumb keeps at most this many meters and is cut
@@ -224,49 +225,40 @@ Item {
             }
         }
 
-        Row {
+        Rectangle {
+            id: topBar
             anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.margins: Theme.spacingLg
-            spacing: Theme.spacingSm
-
-            Rectangle {
-                width: 8
-                height: 8
-                radius: 4
-                anchors.verticalCenter: parent.verticalCenter
-                color: telemetry.connected ? Theme.success : Theme.error
-            }
-
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("%1 · %2").arg(root.droneName)
-                      .arg(telemetry.connected ? qsTr("telemetry live") : qsTr("connecting…"))
-                color: Theme.textPrimary
-                font.family: Theme.fontFamily
-                font.pixelSize: Theme.fontSizeSmall
-                font.weight: Font.Medium
-                style: Text.Outline
-                styleColor: Theme.backgroundPrimary
-            }
-        }
-
-        Row {
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: Theme.spacingLg
-            spacing: Theme.spacingSm
+            height: 48
+            color: Qt.rgba(28 / 255, 28 / 255, 32 / 255, 0.92)
 
-            SecondaryActionButton {
-                visible: !root.followDrone
-                onClicked: {
-                    root.followDrone = true
-                    if (telemetry.hasPosition)
-                        flightMap.center = QtPositioning.coordinate(telemetry.latitude, telemetry.longitude)
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                height: 1
+                color: Theme.borderStrong
+            }
+
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: Theme.spacingLg
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: Theme.spacingSm
+
+                Rectangle {
+                    width: 8
+                    height: 8
+                    radius: 4
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: telemetry.connected ? Theme.success : Theme.error
                 }
 
                 Text {
-                    text: qsTr("Follow Drone")
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("%1 · %2").arg(root.droneName)
+                          .arg(telemetry.connected ? qsTr("telemetry live") : qsTr("connecting…"))
                     color: Theme.textPrimary
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSizeSmall
@@ -274,15 +266,45 @@ Item {
                 }
             }
 
-            SecondaryActionButton {
-                onClicked: root.exited()
+            Row {
+                anchors.right: parent.right
+                anchors.rightMargin: Theme.spacingLg
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: Theme.spacingXl
+                visible: root.order !== null
+
+                Column {
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 1
+
+                    Text {
+                        anchors.right: parent.right
+                        text: root.order ? qsTr("Order · %1").arg(root.order.username) : ""
+                        color: Theme.textPrimary
+                        font.family: Theme.fontFamily
+                        font.pixelSize: Theme.fontSizeSmall
+                        font.weight: Font.DemiBold
+                    }
+
+                    Text {
+                        anchors.right: parent.right
+                        text: root.order ? root.order.orderedAt : ""
+                        color: Theme.textSecondary
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 10
+                    }
+                }
 
                 Text {
-                    text: qsTr("End Flight")
-                    color: Theme.textPrimary
-                    font.family: Theme.fontFamily
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: root.order
+                          ? qsTr("%1, %2  →  %3, %4")
+                                .arg(root.order.startLat.toFixed(5)).arg(root.order.startLon.toFixed(5))
+                                .arg(root.order.endLat.toFixed(5)).arg(root.order.endLon.toFixed(5))
+                          : ""
+                    color: Theme.textTertiary
+                    font.family: "monospace"
                     font.pixelSize: Theme.fontSizeSmall
-                    font.weight: Font.Medium
                 }
             }
         }

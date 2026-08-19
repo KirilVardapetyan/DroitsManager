@@ -65,14 +65,13 @@ Rectangle {
 
     PageHeader {
         id: header
+        visible: !root.inFlight
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: Theme.spacingXl
-        title: root.inFlight ? qsTr("Flight")
-             : root.preparingFlight ? qsTr("Prepare Flight") : qsTr("Orders")
-        subtitle: root.inFlight ? qsTr("Live shipping flight telemetry")
-                : root.preparingFlight
+        title: root.preparingFlight ? qsTr("Prepare Flight") : qsTr("Orders")
+        subtitle: root.preparingFlight
                   ? qsTr("Pick a drone and validate the delivery mission")
                   : qsTr("Deliveries scheduled for your droids")
     }
@@ -124,16 +123,14 @@ Rectangle {
 
     Loader {
         active: root.inFlight
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
         anchors.margins: Theme.spacingXl
 
         sourceComponent: FlightView {
             droneName: root.flightDrone ? root.flightDrone.name : ""
             droneIp: root.flightDrone ? root.flightDrone.ipAddress : ""
             mission: root.flightMission
+            order: root.shippingOrder
 
             onExited: root.flightDrone = null
         }
