@@ -22,6 +22,8 @@ constexpr int GPS_POLL_INTERVAL_MS = 5000;
 // upload_mission runs the full MAVLink mission handshake and reads the
 // mission back to verify it — give it plenty of time.
 constexpr int UPLOAD_TIMEOUT_MS = 20000;
+// Mode change and arming wait for autopilot confirmation.
+constexpr int CONTROL_TIMEOUT_MS = 15000;
 const QString DB_CONNECTION_NAME = QStringLiteral("drones");
 }
 
@@ -322,6 +324,45 @@ void DroneStore::uploadMission(const QString &ipAddress, const QVariantList &way
             emit missionUploadSucceeded(data.value(QStringLiteral("uploaded_waypoints")).toInt());
         else
             emit missionUploadFailed(error);
+    }, params);
+}
+
+bool DroneStore::startingMission() const
+{
+    return m_startingMission;
+}
+
+void DroneStore::startMission(const QString &ipAddress)
+{
+    if (m_startingMission)
+        return;
+
+    m_startingMission = true;
+    emit startingMissionChanged();
+
+    // AUTO first, then arm: the armed vehicle immediately flies the stored
+    // mission from its takeoff item.
+    const QJsonObject params{
+        { QStringLiteral("mode"), QStringLiteral("AUTO") },
+    };
+    requestCommand(ipAddress, QStringLiteral("set_flight_mode"), CONTROL_TIMEOUT_MS,
+                   [this, ipAddress](bool ok, const QJsonObject &, const QString &error) {
+        if (!ok) {
+            m_startingMission = false;
+            emit startingMissionChanged();
+            emit missionStartFailed(tr("Flight mode: %1").arg(error));
+            return;
+        }
+
+        requestCommand(ipAddress, QStringLiteral("arm"), CONTROL_TIMEOUT_MS,
+                       [this](bool ok, const QJsonObject &, const QString &error) {
+            m_startingMission = false;
+            emit startingMissionChanged();
+            if (ok)
+                emit missionStartSucceeded();
+            else
+                emit missionStartFailed(tr("Arm: %1").arg(error));
+        });
     }, params);
 }
 

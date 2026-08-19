@@ -22,6 +22,7 @@ class DroneStore : public QAbstractListModel
     Q_PROPERTY(bool gpsPollingActive READ gpsPollingActive WRITE setGpsPollingActive NOTIFY gpsPollingActiveChanged)
     Q_PROPERTY(bool connecting READ connecting NOTIFY connectingChanged)
     Q_PROPERTY(bool uploadingMission READ uploadingMission NOTIFY uploadingMissionChanged)
+    Q_PROPERTY(bool startingMission READ startingMission NOTIFY startingMissionChanged)
 
 public:
     enum Roles {
@@ -57,11 +58,13 @@ public:
 
     bool connecting() const;
     bool uploadingMission() const;
+    bool startingMission() const;
 
     Q_INVOKABLE void connectDrone(const QString &name, const QString &ipAddress);
     Q_INVOKABLE void removeDrone(int row);
     Q_INVOKABLE QVariantMap droneAt(int row) const;
     Q_INVOKABLE void uploadMission(const QString &ipAddress, const QVariantList &waypoints);
+    Q_INVOKABLE void startMission(const QString &ipAddress);
 
 signals:
     void countChanged();
@@ -73,6 +76,9 @@ signals:
     void uploadingMissionChanged();
     void missionUploadSucceeded(int uploadedWaypoints);
     void missionUploadFailed(const QString &error);
+    void startingMissionChanged();
+    void missionStartSucceeded();
+    void missionStartFailed(const QString &error);
 
 private:
     struct Drone {
@@ -106,4 +112,5 @@ private:
     QTimer m_gpsPollTimer;
     bool m_connecting = false;
     bool m_uploadingMission = false;
+    bool m_startingMission = false;
 };

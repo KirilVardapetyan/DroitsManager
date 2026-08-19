@@ -7,7 +7,10 @@ Rectangle {
 
     property int shippingOrderIndex: -1
     property var shippingOrder: null
+    property var flightDrone: null
+    property var flightMission: []
     readonly property bool preparingFlight: shippingOrderIndex >= 0
+    readonly property bool inFlight: flightDrone !== null
 
     color: Theme.backgroundPrimary
 
@@ -62,6 +65,7 @@ Rectangle {
 
     PageHeader {
         id: header
+        visible: !root.inFlight
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -73,7 +77,7 @@ Rectangle {
     }
 
     OrdersTable {
-        visible: !root.preparingFlight
+        visible: !root.preparingFlight && !root.inFlight
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: header.bottom
@@ -107,11 +111,27 @@ Rectangle {
             endLon: root.shippingOrder ? root.shippingOrder.endLon : 0
 
             onCancelled: root.shippingOrderIndex = -1
-            onShippingStarted: {
+            onShippingStarted: function(drone, mission) {
                 ordersModel.setProperty(root.shippingOrderIndex, "status",
                                         OrderStatusBadge.Status.Started)
                 root.shippingOrderIndex = -1
+                root.flightMission = mission
+                root.flightDrone = drone
             }
+        }
+    }
+
+    Loader {
+        active: root.inFlight
+        anchors.fill: parent
+
+        sourceComponent: FlightView {
+            droneName: root.flightDrone ? root.flightDrone.name : ""
+            droneIp: root.flightDrone ? root.flightDrone.ipAddress : ""
+            mission: root.flightMission
+            order: root.shippingOrder
+
+            onExited: root.flightDrone = null
         }
     }
 }

@@ -43,6 +43,10 @@ qt_add_qml_module(appDroitsManager
         qml/Components/BoxVideoModal.qml
         qml/Components/DroneShellModal.qml
         qml/Components/FlightPrepFlow.qml
+        qml/Components/FlightView.qml
+        qml/Components/AhrsHud.qml
+        qml/Components/VideoStreamView.qml
+        qml/Components/SlideToShip.qml
         qml/Components/OrderStatusBadge.qml
         qml/Components/OrdersTable.qml
         qml/Controls/CloseButton.qml
@@ -64,6 +68,8 @@ qt_add_qml_module(appDroitsManager
         src/DroneStore.cpp
         src/DroneShell.h
         src/DroneShell.cpp
+        src/DroneTelemetry.h
+        src/DroneTelemetry.cpp
         src/VideoPipeline.h
         src/BoxVideoReceiver.h
         src/BoxVideoReceiver.cpp
