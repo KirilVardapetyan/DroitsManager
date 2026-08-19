@@ -1,7 +1,7 @@
 import QtQuick
 import QtLocation
 import QtPositioning
-import DroidsManager
+import DroitsManager
 import "../Components"
 
 Rectangle {
@@ -13,6 +13,15 @@ Rectangle {
     property var savedCenter: defaultCenter
 
     color: Theme.backgroundPrimary
+
+    Component.onCompleted: {
+        BoxStore.gpsPollingActive = true
+        DroneStore.gpsPollingActive = true
+    }
+    Component.onDestruction: {
+        BoxStore.gpsPollingActive = false
+        DroneStore.gpsPollingActive = false
+    }
 
     OsmMapPlugin { id: mapPlugin }
 
@@ -66,17 +75,37 @@ Rectangle {
         onZoomLevelChanged: root.savedZoom = map.zoomLevel
         onCenterChanged: root.savedCenter = map.center
 
-        DeliveryBoxMarker {
-            id: deliveryBoxMarker
-            coordinate: root.defaultCenter
-            boxName: qsTr("Box 1")
-            onClicked: deliveryBoxDrawer.show()
+        MapItemView {
+            model: BoxStore
+
+            delegate: DeliveryBoxMarker {
+                visible: model.hasPosition
+                coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
+                boxName: model.name
+                satelliteCount: model.satellites
+                onClicked: {
+                    deliveryBoxDrawer.boxName = model.name
+                    deliveryBoxDrawer.boxIp = model.ipAddress
+                    deliveryBoxDrawer.show()
+                }
+            }
+        }
+
+        MapItemView {
+            model: DroneStore
+
+            delegate: DroneMarker {
+                visible: model.hasPosition
+                coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
+                droneName: model.name
+                satelliteCount: model.satellites
+                onClicked: console.log("[LiveMap] Drone clicked:", model.name)
+            }
         }
     }
 
     DeliveryBoxDrawer {
         id: deliveryBoxDrawer
-        boxName: deliveryBoxMarker.boxName
         onOpenBoxRequested: console.log("[LiveMap] Open box requested for", boxName)
         onCloseBoxRequested: console.log("[LiveMap] Close box requested for", boxName)
     }

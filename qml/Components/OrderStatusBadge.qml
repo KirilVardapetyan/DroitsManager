@@ -5,20 +5,26 @@ Rectangle {
     id: root
 
     enum Status {
-        Offline,
-        Connected
+        Pending,
+        InProcess,
+        Started,
+        Delivered
     }
 
-    property int status: DroidStatusBadge.Status.Offline
+    property int status: OrderStatusBadge.Status.Pending
 
     readonly property var statusLabels: ({
-        0: qsTr("Offline"),
-        1: qsTr("Connected")
+        0: qsTr("Pending"),
+        1: qsTr("In Process"),
+        2: qsTr("Started"),
+        3: qsTr("Delivered")
     })
 
     readonly property var statusColors: ({
-        0: Theme.error,
-        1: Theme.success
+        0: Theme.warning,
+        1: Theme.info,
+        2: Theme.accent,
+        3: Theme.success
     })
 
     width: badgeLabel.width + Theme.spacingLg

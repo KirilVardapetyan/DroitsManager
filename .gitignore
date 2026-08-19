@@ -1,7 +1,16 @@
+# Build output
 build/
 build-*/
-.qtcreator/
-CMakeLists.txt.user
-*.user
+
+# Qt Creator / IDE user files
+CMakeLists.txt.user*
 *.autosave
+
+# Assistant config
+.claude/
+.claude*
+CLAUDE.md
+CLAUDE.local.md
+
+# OS noise
 .DS_Store

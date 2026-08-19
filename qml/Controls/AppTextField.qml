@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import DroidsManager
+import DroitsManager
 
 Column {
     id: root

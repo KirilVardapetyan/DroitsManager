@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Effects
-import DroidsManager
+import DroitsManager
 
 Rectangle {
     id: root

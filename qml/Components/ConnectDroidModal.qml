@@ -1,9 +1,14 @@
 import QtQuick
-import DroidsManager
+import DroitsManager
 import "../Controls"
 
 ModalShell {
     id: root
+
+    property string nameLabel: qsTr("Box Name")
+    property string namePlaceholder: qsTr("e.g. Box 2")
+    property bool busy: false
+    property string errorText: ""
 
     signal connectRequested(string name, string ipAddress)
 
@@ -13,14 +18,21 @@ ModalShell {
     function open() {
         nameField.text = ""
         ipField.text = ""
+        root.busy = false
+        root.errorText = ""
         root.visible = true
         nameField.forceInputFocus()
     }
 
+    function showError(message) {
+        root.busy = false
+        root.errorText = message
+    }
+
     AppTextField {
         id: nameField
-        label: qsTr("Box Name")
-        placeholderText: qsTr("e.g. Box 2")
+        label: root.nameLabel
+        placeholderText: root.namePlaceholder
     }
 
     AppTextField {
@@ -34,8 +46,21 @@ ModalShell {
     }
 
     function submit() {
+        if (root.busy)
+            return
+        root.busy = true
+        root.errorText = ""
         root.connectRequested(nameField.text, ipField.text)
-        root.close()
+    }
+
+    Text {
+        width: parent.width
+        visible: root.errorText !== ""
+        text: root.errorText
+        color: Theme.error
+        font.family: Theme.fontFamily
+        font.pixelSize: Theme.fontSizeSmall
+        wrapMode: Text.WordWrap
     }
 
     Item {
@@ -72,11 +97,11 @@ ModalShell {
             }
 
             PrimaryActionButton {
-                enabled: nameField.text.length > 0 && ipField.text.length > 0
+                enabled: !root.busy && nameField.text.length > 0 && ipField.text.length > 0
                 onClicked: root.submit()
 
                 Text {
-                    text: qsTr("Connect")
+                    text: root.busy ? qsTr("Connecting…") : qsTr("Connect")
                     color: Theme.textPrimary
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSizeNormal

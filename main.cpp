@@ -5,6 +5,8 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    QCoreApplication::setOrganizationName("Droits");
+    QCoreApplication::setApplicationName("DroitsManager");
     QQuickStyle::setStyle("Basic");
 
     QQmlApplicationEngine engine;
@@ -14,7 +16,7 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.loadFromModule("DroidsManager", "Main");
+    engine.loadFromModule("DroitsManager", "Main");
 
     return app.exec();
 }

@@ -6,27 +6,23 @@ Item {
     id: root
 
     property string title: ""
-    property string buttonText: ""
-    property string nameColumnLabel: qsTr("Box Name")
-    property string emptyText: qsTr("No boxes connected yet")
-    property string rowIconSource: "qrc:/qt/qml/DroitsManager/assets/icons/icon_box.svg"
-    property bool showToggleButton: true
-    property bool showVideoButton: false
-    property bool showShellButton: false
     property alias model: listView.model
 
     readonly property var columns: [
-        { label: root.nameColumnLabel, w: 0.30 },
-        { label: qsTr("Status"), w: 0.20 },
-        { label: qsTr("IP Address"), w: 0.30 },
+        { label: qsTr("Customer"), w: 0.16 },
+        { label: qsTr("Pickup"), w: 0.17 },
+        { label: qsTr("Destination"), w: 0.17 },
+        { label: qsTr("Ordered"), w: 0.16 },
+        { label: qsTr("Status"), w: 0.14 },
         { label: qsTr("Actions"), w: 0.20, right: true }
     ]
 
-    signal connectClicked()
-    signal toggleClicked(int index)
-    signal removeClicked(int index)
-    signal videoClicked(int index)
-    signal shellClicked(int index)
+    signal startShippingClicked(int index)
+    signal abortClicked(int index)
+
+    function formatCoord(lat, lon) {
+        return lat.toFixed(5) + ", " + lon.toFixed(5)
+    }
 
     Item {
         id: tableHeader
@@ -43,20 +39,6 @@ Item {
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSizeXLarge
             font.weight: Font.DemiBold
-        }
-
-        PrimaryActionButton {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: root.connectClicked()
-
-            Text {
-                text: root.buttonText
-                color: Theme.textPrimary
-                font.family: Theme.fontFamily
-                font.pixelSize: Theme.fontSizeNormal
-                font.weight: Font.Medium
-            }
         }
     }
 
@@ -128,7 +110,7 @@ Item {
         Text {
             anchors.centerIn: parent
             visible: listView.count === 0
-            text: root.emptyText
+            text: qsTr("No orders yet")
             color: Theme.textSecondary
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSizeLarge
@@ -153,7 +135,7 @@ Item {
                     anchors.rightMargin: Theme.spacingXl
 
                     Item {
-                        width: parent.width * 0.30
+                        width: parent.width * 0.16
                         height: parent.height
 
                         Row {
@@ -165,13 +147,13 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 18
                                 height: 18
-                                source: root.rowIconSource
+                                source: "qrc:/qt/qml/DroitsManager/assets/icons/icon_user.svg"
                                 fillMode: Image.PreserveAspectFit
                             }
 
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: model.name
+                                text: model.username
                                 color: Theme.textPrimary
                                 font.family: Theme.fontFamily
                                 font.pixelSize: Theme.fontSizeNormal
@@ -182,22 +164,12 @@ Item {
                     }
 
                     Item {
-                        width: parent.width * 0.20
-                        height: parent.height
-
-                        DroidStatusBadge {
-                            anchors.verticalCenter: parent.verticalCenter
-                            status: model.status
-                        }
-                    }
-
-                    Item {
-                        width: parent.width * 0.30
+                        width: parent.width * 0.17
                         height: parent.height
 
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
-                            text: model.ipAddress
+                            text: root.formatCoord(model.startLat, model.startLon)
                             color: Theme.textPrimary
                             font.family: Theme.fontFamily
                             font.pixelSize: Theme.fontSizeNormal
@@ -207,91 +179,95 @@ Item {
                     }
 
                     Item {
+                        width: parent.width * 0.17
+                        height: parent.height
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: root.formatCoord(model.endLat, model.endLon)
+                            color: Theme.textPrimary
+                            font.family: Theme.fontFamily
+                            font.pixelSize: Theme.fontSizeNormal
+                            width: parent.width
+                            elide: Text.ElideRight
+                        }
+                    }
+
+                    Item {
+                        width: parent.width * 0.16
+                        height: parent.height
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: model.orderedAt
+                            color: Theme.textPrimary
+                            font.family: Theme.fontFamily
+                            font.pixelSize: Theme.fontSizeNormal
+                            width: parent.width
+                            elide: Text.ElideRight
+                        }
+                    }
+
+                    Item {
+                        width: parent.width * 0.14
+                        height: parent.height
+
+                        OrderStatusBadge {
+                            anchors.verticalCenter: parent.verticalCenter
+                            status: model.status
+                        }
+                    }
+
+                    Item {
                         width: parent.width * 0.20
                         height: parent.height
 
-                        Row {
+                        PrimaryActionButton {
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            spacing: Theme.spacingSm
+                            visible: model.status === OrderStatusBadge.Status.Pending
+                            buttonHeight: 32
+                            horizontalPadding: Theme.spacingMd
+                            onClicked: root.startShippingClicked(model.index)
 
-                            SecondaryActionButton {
-                                visible: root.showVideoButton
-                                enabled: model.status === DroidStatusBadge.Status.Connected
-                                onClicked: root.videoClicked(model.index)
-
-                                Text {
-                                    text: qsTr("Video")
-                                    color: Theme.textPrimary
-                                    font.family: Theme.fontFamily
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    font.weight: Font.Medium
-                                }
+                            Text {
+                                text: qsTr("Start Shipping")
+                                color: Theme.textPrimary
+                                font.family: Theme.fontFamily
+                                font.pixelSize: Theme.fontSizeSmall
+                                font.weight: Font.Medium
                             }
+                        }
 
-                            SecondaryActionButton {
-                                visible: root.showToggleButton
-                                onClicked: root.toggleClicked(model.index)
+                        PrimaryActionButton {
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: model.status === OrderStatusBadge.Status.InProcess
+                                     || model.status === OrderStatusBadge.Status.Started
+                            buttonHeight: 32
+                            horizontalPadding: Theme.spacingMd
+                            backgroundColor: Theme.error
+                            hoverBackgroundColor: Theme.errorHover
+                            pressedBackgroundColor: Theme.errorPressed
+                            onClicked: root.abortClicked(model.index)
 
-                                Text {
-                                    text: model.status === DroidStatusBadge.Status.Connected
-                                          ? qsTr("Disconnect") : qsTr("Connect")
-                                    color: Theme.textPrimary
-                                    font.family: Theme.fontFamily
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    font.weight: Font.Medium
-                                }
+                            Text {
+                                text: qsTr("Abort")
+                                color: Theme.textPrimary
+                                font.family: Theme.fontFamily
+                                font.pixelSize: Theme.fontSizeSmall
+                                font.weight: Font.Medium
                             }
+                        }
 
-                            Rectangle {
-                                width: 28
-                                height: 28
-                                radius: Theme.radiusXs
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: root.showShellButton
-                                color: shellArea.containsMouse ? Theme.hoverLight : "transparent"
-
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: ">_"
-                                    color: shellArea.containsMouse ? Theme.textPrimary : Theme.textMuted
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    font.family: "monospace"
-                                    font.weight: Font.DemiBold
-                                }
-
-                                MouseArea {
-                                    id: shellArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: root.shellClicked(model.index)
-                                }
-                            }
-
-                            Rectangle {
-                                width: 28
-                                height: 28
-                                radius: Theme.radiusXs
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: removeArea.containsMouse ? Theme.errorTint : "transparent"
-
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "✕"
-                                    color: removeArea.containsMouse ? Theme.error : Theme.textMuted
-                                    font.pixelSize: Theme.fontSizeNormal
-                                    font.family: Theme.fontFamily
-                                }
-
-                                MouseArea {
-                                    id: removeArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: root.removeClicked(model.index)
-                                }
-                            }
+                        Text {
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: model.status === OrderStatusBadge.Status.Delivered
+                            text: "—"
+                            color: Theme.textMuted
+                            font.family: Theme.fontFamily
+                            font.pixelSize: Theme.fontSizeNormal
                         }
                     }
                 }

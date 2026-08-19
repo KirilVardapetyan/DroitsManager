@@ -1,5 +1,5 @@
 import QtQuick
-import DroidsManager
+import DroitsManager
 
 Rectangle {
     id: root
@@ -8,6 +8,8 @@ Rectangle {
 
     signal liveMapClicked()
     signal droidsClicked()
+    signal ordersClicked()
+    signal dronesClicked()
 
     width: Theme.navWidth
     color: Theme.backgroundOverlay
@@ -21,15 +23,27 @@ Rectangle {
         spacing: Theme.spacingLg
 
         NavButton {
-            iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/nav_map.svg"
+            iconSource: "qrc:/qt/qml/DroitsManager/assets/icons/nav_map.svg"
             selected: root.currentIndex === 0
             onClicked: root.liveMapClicked()
         }
 
         NavButton {
-            iconSource: "qrc:/qt/qml/DroidsManager/assets/icons/icon_box.svg"
+            iconSource: "qrc:/qt/qml/DroitsManager/assets/icons/icon_box.svg"
             selected: root.currentIndex === 1
             onClicked: root.droidsClicked()
+        }
+
+        NavButton {
+            iconSource: "qrc:/qt/qml/DroitsManager/assets/icons/nav_orders.svg"
+            selected: root.currentIndex === 2
+            onClicked: root.ordersClicked()
+        }
+
+        NavButton {
+            iconSource: "qrc:/qt/qml/DroitsManager/assets/icons/nav_drone.svg"
+            selected: root.currentIndex === 3
+            onClicked: root.dronesClicked()
         }
     }
 
@@ -46,7 +60,7 @@ Rectangle {
             anchors.centerIn: parent
             width: 24
             height: 24
-            source: "qrc:/qt/qml/DroidsManager/assets/icons/icon_user.svg"
+            source: "qrc:/qt/qml/DroitsManager/assets/icons/icon_user.svg"
             fillMode: Image.PreserveAspectFit
         }
     }

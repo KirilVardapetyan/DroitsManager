@@ -13,6 +13,8 @@ QtObject {
     readonly property color successSubtle: Qt.rgba(34/255, 197/255, 94/255, 0.12)
     readonly property color successTint: Qt.rgba(34/255, 197/255, 94/255, 0.2)
     readonly property color error: "#ef4444"
+    readonly property color errorHover: "#dc2626"
+    readonly property color errorPressed: "#b91c1c"
     readonly property color errorSubtle: Qt.rgba(239/255, 68/255, 68/255, 0.12)
     readonly property color errorTint: Qt.rgba(239/255, 68/255, 68/255, 0.2)
     readonly property color warning: "#f59e0b"

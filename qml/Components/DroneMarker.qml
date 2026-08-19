@@ -5,7 +5,7 @@ import DroitsManager
 MapQuickItem {
     id: root
 
-    property string boxName: ""
+    property string droneName: ""
     property int satelliteCount: -1
 
     readonly property color satelliteColor: satelliteCount >= 6 ? Theme.success
@@ -15,7 +15,7 @@ MapQuickItem {
 
     anchorPoint.x: pinContent.width / 2
     anchorPoint.y: 24
-    z: 9
+    z: 10
 
     sourceItem: Column {
         id: pinContent
@@ -28,13 +28,13 @@ MapQuickItem {
             radius: 24
             color: Qt.rgba(24/255, 24/255, 27/255, 0.9)
             border.width: 1
-            border.color: Theme.borderSubtle
+            border.color: Theme.primary
 
             Image {
                 anchors.centerIn: parent
                 width: 26
                 height: 26
-                source: "qrc:/qt/qml/DroitsManager/assets/icons/icon_box.svg"
+                source: "qrc:/qt/qml/DroitsManager/assets/icons/nav_drone.svg"
                 fillMode: Image.PreserveAspectFit
             }
 
@@ -90,7 +90,7 @@ MapQuickItem {
         }
 
         Rectangle {
-            visible: root.boxName !== ""
+            visible: root.droneName !== ""
             anchors.horizontalCenter: parent.horizontalCenter
             width: pinLabel.width + 10
             height: 16
@@ -102,7 +102,7 @@ MapQuickItem {
             Text {
                 id: pinLabel
                 anchors.centerIn: parent
-                text: root.boxName
+                text: root.droneName
                 color: Theme.textPrimary
                 font.family: Theme.fontFamily
                 font.pixelSize: 10

@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import DroidsManager
+import DroitsManager
 import "qml/Components"
 import "qml/Screens"
 
@@ -9,7 +9,7 @@ Window {
     visible: true
     width: 1280
     height: 720
-    title: qsTr("Droids Manager")
+    title: qsTr("Droits Manager")
     color: Theme.backgroundPrimary
 
     property int currentNavIndex: 0
@@ -34,6 +34,14 @@ Window {
         onDroidsClicked: {
             window.currentNavIndex = 1
             stackView.replace(null, droidsScreen, {}, StackView.Immediate)
+        }
+        onOrdersClicked: {
+            window.currentNavIndex = 2
+            stackView.replace(null, ordersScreen, {}, StackView.Immediate)
+        }
+        onDronesClicked: {
+            window.currentNavIndex = 3
+            stackView.replace(null, dronesScreen, {}, StackView.Immediate)
         }
     }
 
@@ -60,5 +68,15 @@ Window {
     Component {
         id: droidsScreen
         DroidsScreen {}
+    }
+
+    Component {
+        id: ordersScreen
+        OrdersScreen {}
+    }
+
+    Component {
+        id: dronesScreen
+        DronesScreen {}
     }
 }

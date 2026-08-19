@@ -1,5 +1,5 @@
 import QtQuick
-import DroidsManager
+import DroitsManager
 import "../Controls"
 
 Item {

@@ -7,5 +7,5 @@ Plugin {
     PluginParameter { name: "osm.mapping.custom.mapcopyright"; value: "CartoDB" }
     PluginParameter { name: "osm.mapping.custom.datacopyright"; value: "OpenStreetMap" }
     PluginParameter { name: "osm.mapping.providersrepository.disabled"; value: "true" }
-    PluginParameter { name: "osm.useragent"; value: "DroidsManager" }
+    PluginParameter { name: "osm.useragent"; value: "DroitsManager" }
 }

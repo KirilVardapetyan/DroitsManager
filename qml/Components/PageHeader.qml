@@ -1,5 +1,5 @@
 import QtQuick
-import DroidsManager
+import DroitsManager
 
 Item {
     id: root
