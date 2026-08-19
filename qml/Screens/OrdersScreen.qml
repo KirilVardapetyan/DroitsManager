@@ -8,6 +8,7 @@ Rectangle {
     property int shippingOrderIndex: -1
     property var shippingOrder: null
     property var flightDrone: null
+    property var flightMission: []
     readonly property bool preparingFlight: shippingOrderIndex >= 0
     readonly property bool inFlight: flightDrone !== null
 
@@ -111,10 +112,11 @@ Rectangle {
             endLon: root.shippingOrder ? root.shippingOrder.endLon : 0
 
             onCancelled: root.shippingOrderIndex = -1
-            onShippingStarted: function(drone) {
+            onShippingStarted: function(drone, mission) {
                 ordersModel.setProperty(root.shippingOrderIndex, "status",
                                         OrderStatusBadge.Status.Started)
                 root.shippingOrderIndex = -1
+                root.flightMission = mission
                 root.flightDrone = drone
             }
         }
@@ -131,6 +133,7 @@ Rectangle {
         sourceComponent: FlightView {
             droneName: root.flightDrone ? root.flightDrone.name : ""
             droneIp: root.flightDrone ? root.flightDrone.ipAddress : ""
+            mission: root.flightMission
 
             onExited: root.flightDrone = null
         }

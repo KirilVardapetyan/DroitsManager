@@ -23,7 +23,7 @@ Item {
     readonly property var commandCycle: ["takeoff", "waypoint", "land", "rtl"]
 
     signal cancelled()
-    signal shippingStarted(var drone)
+    signal shippingStarted(var drone, var mission)
 
     Component.onCompleted: DroneStore.pollingActive = true
     Component.onDestruction: DroneStore.pollingActive = false
@@ -766,7 +766,9 @@ Item {
                 backgroundColor: Theme.success
                 hoverBackgroundColor: Qt.darker(Theme.success, 1.15)
                 pressedBackgroundColor: Qt.darker(Theme.success, 1.3)
-                onClicked: root.shippingStarted(root.selectedDrone)
+                // Edits invalidate the mission, so at this point the model
+                // still matches what was validated on the drone.
+                onClicked: root.shippingStarted(root.selectedDrone, root.collectWaypoints())
 
                 Text {
                     text: qsTr("Start Shipping")
