@@ -46,6 +46,7 @@ qt_add_qml_module(appDroitsManager
         qml/Components/FlightView.qml
         qml/Components/AhrsHud.qml
         qml/Components/VideoStreamView.qml
+        qml/Components/SlideToShip.qml
         qml/Components/OrderStatusBadge.qml
         qml/Components/OrdersTable.qml
         qml/Controls/CloseButton.qml

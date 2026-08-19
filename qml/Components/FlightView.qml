@@ -12,6 +12,7 @@ Item {
     property var mission: []
     property var order: null
     property bool followDrone: true
+    property string shipError: ""
 
     // The flown-path breadcrumb keeps at most this many meters and is cut
     // from its oldest end once longer.
@@ -310,6 +311,7 @@ Item {
         }
 
         AhrsHud {
+            id: hud
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.margins: Theme.spacingLg
@@ -320,9 +322,55 @@ Item {
         }
 
         VideoStreamView {
+            id: videoPanel
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.margins: Theme.spacingLg
+        }
+
+        SlideToShip {
+            id: shipSlider
+            anchors.left: hud.right
+            anchors.right: videoPanel.left
+            anchors.leftMargin: Theme.spacingLg
+            anchors.rightMargin: Theme.spacingLg
+            anchors.verticalCenter: hud.verticalCenter
+            busy: DroneStore.startingMission
+
+            onActivated: {
+                root.shipError = ""
+                DroneStore.startMission(root.droneIp)
+            }
+        }
+
+        Text {
+            anchors.left: shipSlider.left
+            anchors.right: shipSlider.right
+            anchors.bottom: shipSlider.top
+            anchors.bottomMargin: Theme.spacingSm
+            visible: root.shipError !== ""
+            text: root.shipError
+            color: Theme.error
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontSizeSmall
+            font.weight: Font.Medium
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            style: Text.Outline
+            styleColor: Theme.backgroundPrimary
+        }
+
+        Connections {
+            target: DroneStore
+
+            function onMissionStartSucceeded() {
+                shipSlider.completed = true
+            }
+
+            function onMissionStartFailed(error) {
+                root.shipError = error
+                shipSlider.reset()
+            }
         }
     }
 }
