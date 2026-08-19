@@ -330,11 +330,9 @@ Item {
 
         SlideToShip {
             id: shipSlider
-            anchors.left: hud.right
-            anchors.right: videoPanel.left
-            anchors.leftMargin: Theme.spacingLg
-            anchors.rightMargin: Theme.spacingLg
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: hud.verticalCenter
+            width: (videoPanel.x - (hud.x + hud.width)) / 2
             busy: DroneStore.startingMission
 
             onActivated: {
