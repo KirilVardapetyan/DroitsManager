@@ -323,6 +323,8 @@ Item {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.margins: Theme.spacingLg
+            streamUri: DroneStore.videoUriFor(root.droneIp)
+            active: root.visible
         }
 
         SlideToShip {

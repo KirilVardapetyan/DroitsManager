@@ -34,8 +34,13 @@ Rectangle {
         model: DroneStore
         showToggleButton: false
         showShellButton: true
+        showVideoButton: true
 
         onConnectClicked: connectModal.open()
+        onVideoClicked: function(index) {
+            var drone = DroneStore.droneAt(index)
+            videoModal.open(drone.name, drone.ipAddress)
+        }
         onShellClicked: function(index) {
             var drone = DroneStore.droneAt(index)
             shellModal.open(drone.name, drone.ipAddress)
@@ -47,6 +52,10 @@ Rectangle {
 
     DroneShellModal {
         id: shellModal
+    }
+
+    DroneVideoModal {
+        id: videoModal
     }
 
     ConnectDroidModal {

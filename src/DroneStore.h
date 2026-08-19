@@ -65,6 +65,7 @@ public:
     Q_INVOKABLE QVariantMap droneAt(int row) const;
     Q_INVOKABLE void uploadMission(const QString &ipAddress, const QVariantList &waypoints);
     Q_INVOKABLE void startMission(const QString &ipAddress);
+    Q_INVOKABLE QString videoUriFor(const QString &ipAddress) const;
 
 signals:
     void countChanged();

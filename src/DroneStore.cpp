@@ -327,6 +327,13 @@ void DroneStore::uploadMission(const QString &ipAddress, const QVariantList &way
     }, params);
 }
 
+QString DroneStore::videoUriFor(const QString &ipAddress) const
+{
+    if (ipAddress.trimmed().isEmpty())
+        return {};
+    return DroneProtocol::videoUri(ipAddress.trimmed());
+}
+
 bool DroneStore::startingMission() const
 {
     return m_startingMission;

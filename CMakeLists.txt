@@ -42,6 +42,7 @@ qt_add_qml_module(appDroitsManager
         qml/Components/ConnectDroidModal.qml
         qml/Components/BoxVideoModal.qml
         qml/Components/DroneShellModal.qml
+        qml/Components/DroneVideoModal.qml
         qml/Components/FlightPrepFlow.qml
         qml/Components/FlightView.qml
         qml/Components/AhrsHud.qml
