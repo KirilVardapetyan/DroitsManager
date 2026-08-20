@@ -24,7 +24,11 @@ Item {
 
     signal exited()
 
-    Component.onCompleted: rebuildMissionLayer()
+    Component.onCompleted: {
+        rebuildMissionLayer()
+        BoxStore.gpsPollingActive = true
+    }
+    Component.onDestruction: BoxStore.gpsPollingActive = false
     onMissionChanged: rebuildMissionLayer()
 
     function rebuildMissionLayer() {
@@ -231,6 +235,17 @@ Item {
                 z: 2
                 line.width: 3
                 line.color: Theme.info
+            }
+
+            MapItemView {
+                model: BoxStore
+
+                delegate: DeliveryBoxMarker {
+                    visible: model.hasPosition
+                    coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
+                    boxName: model.name
+                    satelliteCount: model.satellites
+                }
             }
 
             DroneMarker {
